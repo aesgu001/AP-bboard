@@ -1,5 +1,6 @@
 // BbUser class interface
 
+// #include <iostream> // std::cout
 #include <string>
 
 class BbUser
@@ -18,4 +19,17 @@ public:
     BbUser& operator=(const BbUser&);
     // BbUser destructor
     ~BbUser();
+    // BbUser username accessor
+    const std::string &username() const;
+    /*
+    *   Checks if the username and password parameters match those of the object that called
+    *   this function.
+    * 
+    *   @param username the string to compare with the object's username.
+    *   @param password the string to compare with the object's password.
+    * 
+    *   @return True if both usernames and passwords are equivalent in length and characters.
+    *           False if either username or string parameter is empty.
+    */
+    bool match(std::string, std::string) const;
 };
