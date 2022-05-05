@@ -1,3 +1,5 @@
+#pragma once
+
 #include "bb-user.h"
 // #include "bb-user.cpp"
 

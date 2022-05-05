@@ -1,3 +1,4 @@
+#pragma once
 // BbUser class interface
 
 // #include <iostream> // std::cout
