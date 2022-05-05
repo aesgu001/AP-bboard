@@ -21,6 +21,30 @@ std::string readLine();
 bool readInteger(int&);
 
 /*
+*   Stores a single word string from standard input.
+*
+*   @param stString variable to store the string.
+*
+*   @return True if the string does not contain a whitespace, tab, or newline character.
+*/
+bool readSingleWordString(std::string&);
+
+/*
+*   Assigns a registered user with the matching username and password inputs as the Bboard's
+*   current user.
+*
+*   @return None.
+*/
+void login(const std::vector<BbUser>&, const BbUser*&);
+
+/*
+*   Adds a new user object to the Bboard and sets it as the current user.
+*
+*   @return None.
+*/
+void registerUser(std::vector<BbUser>&, const BbUser*&);
+
+/*
 *   Reads a number option from standard input.
 *
 *   @param numOptions the number of valid options starting from 1.
@@ -36,7 +60,7 @@ int enterOption(int);
 *
 *   @return None.
 */
-void runLogin(bool&, std::vector<BbUser>&, BbUser**);
+void runLogin(bool&, std::vector<BbUser>&, const BbUser*&);
 
 /*
 *   Launches the bulletin board, enabling user login/registration and posting messages.

@@ -29,6 +29,27 @@ bool readInteger(int &stInt)
     return true;
 }
 
+bool readSingleWordString(std::string &stString)
+{
+    std::string str;
+    while (str.empty())
+    {
+        str = readLine();
+    }
+
+    for (char c : str)
+    {
+        if (c == ' ' || c == '\t' || c == '\n')
+        {
+            return false;
+        }
+    }
+
+    stString = str;
+
+    return true;
+}
+
 int enterOption(int numOptions)
 {
     int option = 0;
@@ -43,7 +64,67 @@ int enterOption(int numOptions)
     return option;
 }
 
-void runLogin(bool &exitCalled, std::vector<BbUser> &users, BbUser **currUser)
+void login(const std::vector<BbUser> &users, const BbUser* &currUser)
+{
+    std::string username, password;
+    std::cout << "Enter username: ";
+    while (!readSingleWordString(username))
+    {
+        std::cout << "ERROR! Please enter a one-word username: ";
+    }
+
+    std::cout << "Enter password: ";
+    while (!readSingleWordString(password))
+    {
+        std::cout << "ERROR! Please enter a one-word password: ";
+    }
+
+    for (const BbUser &user : users)
+    {
+        if (user.match(username, password))
+        {
+            currUser = &user;
+            std::cout << "Welcome back, " << currUser->username() << "!\n\n";
+
+            return;
+        }
+    }
+
+    std::cout << "Incorrect username or password!\n\n";
+}
+
+void registerUser(std::vector<BbUser> &users, const BbUser* &currUser)
+{
+    std::string username, password;
+    std::cout << "Enter new username: ";
+    while (!readSingleWordString(username))
+    {
+        std::cout << "ERROR! Please enter a one-word username: ";
+    }
+
+    std::cout << "Enter new password: ";
+    while (!readSingleWordString(password))
+    {
+        std::cout << "ERROR! Please enter a one-word password: ";
+    }
+
+    for (const BbUser &user : users)
+    {
+        if (user.username() == username)
+        {
+            std::cout << "ERROR! Username " << username << " already exists!\n\n";
+
+            return;
+        }
+    }
+
+    // Set new user object at the end of the list as the current user
+    users.push_back(BbUser(username, password));
+    currUser = &users[users.size() - 1];
+    std::cout << "Welcome, " << currUser->username() << "!\n\n";
+}
+
+void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currUser)
 {
     int option = 0;
     std::cout   << "LOGIN MENU\n"
@@ -54,13 +135,11 @@ void runLogin(bool &exitCalled, std::vector<BbUser> &users, BbUser **currUser)
 
     if (option == 1)
     {
-        // TODO: login
-        std::cout << "Login\n\n";
+        login(users, currUser);
     }
     else if (option == 2)
     {
-        // TODO: register
-        std::cout << "Register\n\n";
+        registerUser(users, currUser);
     }
     else // option == 3
     {
@@ -71,7 +150,7 @@ void runLogin(bool &exitCalled, std::vector<BbUser> &users, BbUser **currUser)
 void runBboard()
 {
     std::vector<BbUser> users;
-    BbUser* currUser = nullptr;
+    const BbUser* currUser = nullptr;
 
     bool exitCalled = false;
 
@@ -81,11 +160,13 @@ void runBboard()
     {
         if (!currUser)
         {
-            runLogin(exitCalled, users, &currUser);
+            runLogin(exitCalled, users, currUser);
         }
         else
         {
             // TODO: runMessage
+            std::cout << "Logging " << currUser->username() << " out...\n\n";
+            currUser = nullptr;
         }
     }
 
