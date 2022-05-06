@@ -34,6 +34,21 @@ bool readInteger(int&);
 bool readSingleWordString(std::string&);
 
 /*
+*   Reads a subject string from standard input.
+*
+*   @return A non-empty string.
+*/
+std::string enterSubject();
+
+/*
+*   Reads a body string from standard input. After entering at least 1 non-empty string line, hit
+*   'ENTER' two consecutive times to stop.
+*
+*   @return A non-empty string with 1 or more lines.
+*/
+std::string enterBody();
+
+/*
 *   Assigns a registered user with the matching username and password inputs as the Bboard's
 *   current user.
 *
@@ -56,6 +71,30 @@ void registerUser(std::vector<BbUser>&, const BbUser*&);
 *   @return A valid number option.
 */
 int enterOption(int);
+
+/*
+*   Writes a border line of characters to standard output.
+*
+*   @param borderChar the character to display.
+*   @param borderLength the length of the line.
+*
+*   @return None.
+*/
+void drawBorderLine(char, int);
+
+/*
+*   Display all of Bboard's messages to standard output. Each topic is separated by a line border.
+*
+*   @return None.
+*/
+void displayMessages(const std::vector<BbMessage>&);
+
+/*
+*   Adds a new topic to the Bboard.
+*
+*   @return None.
+*/
+void addTopic(const BbUser*&, std::vector<BbMessage>&);
 
 /*
 *   Opens a menu prompt with the following options: Login, Register, and Exit.

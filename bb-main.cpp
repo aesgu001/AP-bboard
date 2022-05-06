@@ -50,6 +50,38 @@ bool readSingleWordString(std::string &stString)
     return true;
 }
 
+std::string enterSubject()
+{
+    std::string subject;
+
+    while (subject.empty())
+    {
+        subject = readLine();
+    }
+
+    return subject;
+}
+
+std::string enterBody()
+{
+    int numLine = 1;
+    std::string body, line;
+
+    while (body.empty() || !line.empty())
+    {
+        std::cout << numLine << ".  ";
+        ++numLine;
+
+        line = readLine();
+        if (!line.empty())
+        {
+            body += line + '\n';
+        }
+    }
+
+    return body;
+}
+
 int enterOption(int numOptions)
 {
     int option = 0;
@@ -124,6 +156,53 @@ void registerUser(std::vector<BbUser> &users, const BbUser* &currUser)
     std::cout << "Welcome, " << currUser->username() << "!\n\n";
 }
 
+void drawBorderLine(char borderChar, int borderLength)
+{
+    for (int i = 0; i < borderLength; ++i)
+    {
+        std::cout << borderChar;
+    }
+    std::cout << '\n';
+}
+
+void displayMessages(const std::vector<BbMessage> &messages)
+{
+    std::cout << "DISPLAY MESSAGES\n";
+
+    if (messages.empty())
+    {
+        std::cout << "There are no messages.\n\n";
+        return;
+    }
+
+    for (const BbMessage &message : messages)
+    {
+        drawBorderLine('-', 100);
+        std::cout   << "topic: " << message.subject() << '\n'
+                    << message.author() << ": " << message.body();
+        drawBorderLine('-', 100);
+    }
+
+    std::cout << "End of messages.\n\n";
+}
+
+void addTopic(const BbUser* &currUser, std::vector<BbMessage> &messages)
+{
+    std::string subject, body;
+
+    std::cout << "ADD NEW TOPIC\n";
+    
+    std::cout << "Enter subject: ";
+    subject = enterSubject();
+
+    std::cout   << "Enter body.\n"
+                << "Hit 'ENTER' twice to stop:\n";
+    body = enterBody();
+
+    messages.push_back(BbMessage(currUser->username(), subject, body));
+    std::cout << "Added new topic \"" << subject << "\" to AP Bulletin Board.\n\n";
+}
+
 void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currUser)
 {
     int option = 0;
@@ -159,18 +238,16 @@ void runMessage(const BbUser* &currUser, std::vector<BbMessage> &messages)
 
     if (option == 1)
     {
-        // TODO: displayMessages
-        std::cout << "Display Messages\n\n";
+        displayMessages(messages);
     }
     else if (option == 2)
     {
-        // TODO: addTopic
-        std::cout << "Add New Topic\n\n";
+        addTopic(currUser, messages);
     }
     else if (option == 3)
     {
         // TODO: addReply
-        std::cout << "Reply to a Message\n\n";
+        std::cout << "REPLY TO A MESSAGE\n\n";
     }
     else // option == 4
     {
