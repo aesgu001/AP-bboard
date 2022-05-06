@@ -2,6 +2,8 @@
 
 #include "bb-user.h"
 // #include "bb-user.cpp"
+#include "bb-message.h"
+// #include "bb-message.cpp"
 
 #include <iostream> // std::cin/cout
 #include <vector>   // std::vector
@@ -63,6 +65,14 @@ int enterOption(int);
 *   @return None.
 */
 void runLogin(bool&, std::vector<BbUser>&, const BbUser*&);
+
+/*
+*   Opens a menu prompt with the following options: Display Messages, Add New Topic, Reply to a Message,
+*   and Log Out.
+*
+*   @return None.
+*/
+void runMessage(const BbUser*&, std::vector<BbMessage>&);
 
 /*
 *   Launches the bulletin board, enabling user login/registration and posting messages.

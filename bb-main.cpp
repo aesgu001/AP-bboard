@@ -147,10 +147,44 @@ void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currU
     }
 }
 
+void runMessage(const BbUser* &currUser, std::vector<BbMessage> &messages)
+{
+    int option = 0;
+    std::cout   << "MESSAGE MENU\n"
+                << "(1) Display Messages\n"
+                << "(2) Add New Topic\n"
+                << "(3) Reply to a Message\n"
+                << "(4) Log Out\n\n";
+    option = enterOption(4);
+
+    if (option == 1)
+    {
+        // TODO: displayMessages
+        std::cout << "Display Messages\n\n";
+    }
+    else if (option == 2)
+    {
+        // TODO: addTopic
+        std::cout << "Add New Topic\n\n";
+    }
+    else if (option == 3)
+    {
+        // TODO: addReply
+        std::cout << "Reply to a Message\n\n";
+    }
+    else // option == 4
+    {
+        std::cout << "Logging " << currUser->username() << " out...\n\n";
+        currUser = nullptr;
+    }
+}
+
 void runBboard()
 {
     std::vector<BbUser> users;
     const BbUser* currUser = nullptr;
+
+    std::vector<BbMessage> messages;
 
     bool exitCalled = false;
 
@@ -164,9 +198,7 @@ void runBboard()
         }
         else
         {
-            // TODO: runMessage
-            std::cout << "Logging " << currUser->username() << " out...\n\n";
-            currUser = nullptr;
+            runMessage(currUser, messages);
         }
     }
 
