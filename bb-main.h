@@ -1,7 +1,7 @@
 #pragma once
 
+#include "bb-topic.h"
 #include "bb-user.h"
-#include "bb-message.h"
 
 #include <iostream> // std::cin/cout
 #include <vector>   // std::vector
@@ -56,15 +56,14 @@ std::string enterSubject();
 std::string enterBody();
 
 /*
-*   Assigns a registered user with the matching username and password inputs as the Bboard's
-*   current user.
+*   Assigns a registered user with the matching username and password inputs as the current user.
 *
 *   @return None.
 */
 void login(const std::vector<BBUser>&, const BBUser*&);
 
 /*
-*   Adds a new user object to the Bboard and sets it as the current user.
+*   Adds a new user object to the BBoard and sets it as the current user.
 *
 *   @return None.
 */
@@ -81,18 +80,18 @@ void registerUser(std::vector<BBUser>&, const BBUser*&);
 void drawBorderLine(char, int);
 
 /*
-*   Display all of Bboard's messages to standard output. Each topic is separated by a line border.
+*   Display all of BBoard's messages to standard output. Each topic is separated by a line border.
 *
 *   @return None.
 */
-void displayMessages(const std::vector<BBMessage>&);
+void displayMessages(const std::vector<BBMessage*>&);
 
 /*
-*   Adds a new topic to the Bboard.
+*   Adds a new topic to the BBoard.
 *
 *   @return None.
 */
-void addTopic(const BBUser*&, std::vector<BBMessage>&);
+void addTopic(const BBUser*&, std::vector<BBMessage*>&);
 
 /*
 *   Opens a menu prompt with the following options: Login, Register, and Exit.
@@ -109,7 +108,7 @@ void runLogin(bool&, std::vector<BBUser>&, const BBUser*&);
 *
 *   @return None.
 */
-void runMessage(const BBUser*&, std::vector<BBMessage>&);
+void runMessage(const BBUser*&, std::vector<BBMessage*>&);
 
 /*
 *   Launches the bulletin board, enabling user login/registration and posting messages.

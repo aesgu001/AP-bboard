@@ -161,7 +161,7 @@ void drawBorderLine(char borderChar, int borderLength)
     std::cout << '\n';
 }
 
-void displayMessages(const std::vector<BBMessage> &messages)
+void displayMessages(const std::vector<BBMessage*> &messages)
 {
     std::cout << "DISPLAY MESSAGES\n";
 
@@ -171,18 +171,21 @@ void displayMessages(const std::vector<BBMessage> &messages)
         return;
     }
 
-    for (const BBMessage &message : messages)
+    for (BBMessage* const &message : messages)
     {
         drawBorderLine('-', 100);
-        std::cout   << "topic: " << message.subject() << '\n'
-                    << message.author() << ": " << message.body();
+        if (!message->isReply())
+        {
+            std::cout   << "topic: " << dynamic_cast<BBTopic* const>(message)->subject() << '\n'
+                        << message->author() << ": " << message->body();
+        }
         drawBorderLine('-', 100);
     }
 
     std::cout << "End of messages.\n\n";
 }
 
-void addTopic(const BBUser* &currUser, std::vector<BBMessage> &messages)
+void addTopic(const BBUser* &currUser, std::vector<BBMessage*> &messages)
 {
     std::string subject, body;
     std::cout << "ADD NEW TOPIC\n";
@@ -194,7 +197,8 @@ void addTopic(const BBUser* &currUser, std::vector<BBMessage> &messages)
                 << "Hit 'ENTER' twice to stop:\n";
     body = enterBody();
 
-    messages.push_back(BBMessage(currUser->username(), subject, body));
+    BBMessage* topic = new BBTopic(subject, currUser->username(), body);
+    messages.push_back(topic);
     std::cout << "Added new topic \"" << subject << "\" to AP Bulletin Board.\n\n";
 }
 
@@ -222,7 +226,7 @@ void runLogin(bool &exitCalled, std::vector<BBUser> &users, const BBUser* &currU
     }
 }
 
-void runMessage(const BBUser* &currUser, std::vector<BBMessage> &messages)
+void runMessage(const BBUser* &currUser, std::vector<BBMessage*> &messages)
 {
     int option = 0;
     std::cout   << "MESSAGE MENU\n"
@@ -258,7 +262,7 @@ void runBBoard()
     std::vector<BBUser> users;
     const BBUser* currUser = nullptr;
 
-    std::vector<BBMessage> messages;
+    std::vector<BBMessage*> messages;
 
     bool exitCalled = false;
 
@@ -277,6 +281,12 @@ void runBBoard()
     }
 
     std::cout << "Goodbye!\n";
+
+    for (BBMessage* &message : messages)
+    {
+        delete message;
+        message = nullptr;
+    }
 }
 
 /*      DRIVER CODE     */
