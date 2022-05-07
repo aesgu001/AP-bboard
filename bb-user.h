@@ -1,26 +1,25 @@
 #pragma once
-// BbUser class interface
+// BBUser class interface
 
-// #include <iostream> // std::cout
 #include <string>
 
-class BbUser
+class BBUser
 {
 private:
-    std::string uname;  // ID name of the user.
-    std::string passwd; // Password for accessing the user.
+    std::string _username;  // ID name of the user.
+    std::string _password;  // Password for accessing the user.
 public:
-    // BbUser parameterized constructor
-    BbUser(std::string, std::string);
-    // BbUser default constructor
-    BbUser();
-    // BbUser copy constructor
-    BbUser(const BbUser&);
-    // BbUser overloaded assignment operator
-    BbUser& operator=(const BbUser&);
-    // BbUser destructor
-    ~BbUser();
-    // BbUser username accessor
+    // BBUser parameterized constructor
+    BBUser(std::string, std::string);
+    // BBUser default constructor
+    BBUser();
+    // BBUser copy constructor
+    BBUser(const BBUser&);
+    // BBUser overloaded assignment operator
+    BBUser& operator=(const BBUser&);
+    // BBUser destructor
+    ~BBUser();
+    // BBUser username accessor
     const std::string &username() const;
     /*
     *   Checks if the username and password parameters match those of the object that called
@@ -30,7 +29,7 @@ public:
     *   @param password the string to compare with the object's password.
     * 
     *   @return True if both usernames and passwords are equivalent in length and characters.
-    *           False if either username or string parameter is empty.
+    *           False if either username or password parameter is empty.
     */
     bool match(std::string, std::string) const;
 };

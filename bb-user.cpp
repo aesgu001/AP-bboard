@@ -1,68 +1,41 @@
-// BbUser class implementation
+// BBUser class implementation
 
 #include "bb-user.h"
 
-BbUser::BbUser(std::string username, std::string password) : uname(username), passwd(password)
+BBUser::BBUser(std::string username, std::string password) : _username(username), _password(password)
 {}
 
-BbUser::BbUser() : BbUser("", "")
+BBUser::BBUser() : BBUser("", "")
 {}
 
-BbUser::BbUser(const BbUser &rhs) : BbUser(rhs.uname, rhs.passwd)
+BBUser::BBUser(const BBUser &rhs) : BBUser(rhs._username, rhs._password)
 {}
 
-BbUser::~BbUser()
-{}
-
-BbUser& BbUser::operator=(const BbUser &rhs)
+BBUser& BBUser::operator=(const BBUser &rhs)
 {
     if (this != &rhs)
     {
-        this->uname = rhs.uname;
-        this->passwd = rhs.passwd;
+        this->_username = rhs._username;
+        this->_password = rhs._password;
     }
-
+    
     return *this;
 }
 
-const std::string& BbUser::username() const
+BBUser::~BBUser()
+{}
+
+const std::string& BBUser::username() const
 {
-    return this->uname;
+    return this->_username;
 }
 
-bool BbUser::match(std::string username, std::string password) const
+bool BBUser::match(std::string username, std::string password) const
 {
     if (username.empty() || password.empty())
     {
         return false;
     }
 
-    return (this->uname == username) && (this->passwd == password);
+    return this->_username == username && this->_password == password;
 }
-
-/*int main()
-{
-    BbUser testEmpty;   // Default
-
-    BbUser testUser1("JSilverhand", "Samurai2077"); // Parameterized
-    BbUser testUser2("V-Hero", "Cyberpunk2077");    // Parameterized
-
-    BbUser testCopy(testUser1); // Copy
-
-    BbUser testAssign;
-    testAssign = testUser2;     // Assignment
-    testAssign = testAssign;    // Self-assignment
-
-    std::cout << "testCopy.username() = " << testCopy.username() << "\n";       // JSilverhand
-    std::cout << "testAssign.username() = " << testAssign.username() << "\n\n"; // V-Hero
-
-    std::cout   << "testCopy.match('JSilverhand', 'Samurai2077') = "
-                << testCopy.match("JSilverhand", "Samurai2077") << "\n";            // 1 or true
-    std::cout   << "testAssign.match('Jackie', 'Cyberpunk2077') = "
-                << testAssign.match("Jackie", "Cyberpunk2077") << "\n";             // 0 or false
-    std::cout   << "testAssign.match('V-Hero', 'BigLeagues2077') = "
-                << testAssign.match("V-Hero", "BigLeagues2077") << "\n";            // 0 or false
-    std::cout   << "testEmpty.match('', '') = " << testEmpty.match("", "") << "\n"; // 0 or false
-
-    return 0;
-}*/

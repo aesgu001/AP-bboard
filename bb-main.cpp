@@ -4,32 +4,36 @@ std::string readLine()
 {
     std::string line;
     std::getline(std::cin, line, '\n');
-
     return line;
 }
 
 bool readInteger(int &stInt)
 {
-    std::string numStr;
-    while (numStr.empty())
+    std::string intStr;
+    while (intStr.empty())
     {
-        numStr = readLine();
+        intStr = readLine();
     }
     
-    for (char c : numStr)
+    for (std::size_t i = 0; i < intStr.length(); ++i)
     {
-        if (!isdigit(c))
+        // Allow negative integer values
+        if (i <= 0 && (intStr[i] == '-' || intStr[i] == '+'))
+        {
+            continue;
+        }
+
+        if (!isdigit(static_cast<int>(intStr[i])))
         {
             return false;
         }
     }
 
-    stInt = std::stoi(numStr);
-
+    stInt = std::stoi(intStr);
     return true;
 }
 
-bool readSingleWordString(std::string &stString)
+bool readString(std::string &stString)
 {
     std::string str;
     while (str.empty())
@@ -46,14 +50,24 @@ bool readSingleWordString(std::string &stString)
     }
 
     stString = str;
-
     return true;
+}
+
+int enterOption(int numOptions)
+{
+    int option = 0;
+    std::cout << "Enter option: ";
+    while (!readInteger(option) || option <= 0 || option > numOptions)
+    {
+        std::cout << "ERROR! Please enter a valid option: ";
+    }
+
+    return option;
 }
 
 std::string enterSubject()
 {
     std::string subject;
-
     while (subject.empty())
     {
         subject = readLine();
@@ -69,9 +83,7 @@ std::string enterBody()
 
     while (body.empty() || !line.empty())
     {
-        std::cout << numLine << ".  ";
-        ++numLine;
-
+        std::cout << numLine++ << ".  ";
         line = readLine();
         if (!line.empty())
         {
@@ -82,42 +94,27 @@ std::string enterBody()
     return body;
 }
 
-int enterOption(int numOptions)
-{
-    int option = 0;
-
-    std::cout << "Enter option: ";
-    while (!readInteger(option) || option <= 0 || option > numOptions)
-    {
-        std::cout << "ERROR! Please enter a valid option: ";
-    }   
-    std::cout << "\n";
-
-    return option;
-}
-
-void login(const std::vector<BbUser> &users, const BbUser* &currUser)
+void login(const std::vector<BBUser> &users, const BBUser* &currUser)
 {
     std::string username, password;
     std::cout << "Enter username: ";
-    while (!readSingleWordString(username))
+    while (!readString(username))
     {
         std::cout << "ERROR! Please enter a one-word username: ";
     }
 
     std::cout << "Enter password: ";
-    while (!readSingleWordString(password))
+    while (!readString(password))
     {
         std::cout << "ERROR! Please enter a one-word password: ";
     }
 
-    for (const BbUser &user : users)
+    for (const BBUser &user : users)
     {
         if (user.match(username, password))
         {
             currUser = &user;
             std::cout << "Welcome back, " << currUser->username() << "!\n\n";
-
             return;
         }
     }
@@ -125,33 +122,32 @@ void login(const std::vector<BbUser> &users, const BbUser* &currUser)
     std::cout << "Incorrect username or password!\n\n";
 }
 
-void registerUser(std::vector<BbUser> &users, const BbUser* &currUser)
+void registerUser(std::vector<BBUser> &users, const BBUser* &currUser)
 {
     std::string username, password;
     std::cout << "Enter new username: ";
-    while (!readSingleWordString(username))
+    while (!readString(username))
     {
         std::cout << "ERROR! Please enter a one-word username: ";
     }
 
     std::cout << "Enter new password: ";
-    while (!readSingleWordString(password))
+    while (!readString(password))
     {
         std::cout << "ERROR! Please enter a one-word password: ";
     }
 
-    for (const BbUser &user : users)
+    for (const BBUser &user : users)
     {
         if (user.username() == username)
         {
             std::cout << "ERROR! Username " << username << " already exists!\n\n";
-
             return;
         }
     }
 
-    // Set new user object at the end of the list as the current user
-    users.push_back(BbUser(username, password));
+    // Set new user at the end of the list as current user
+    users.push_back(BBUser(username, password));
     currUser = &users[users.size() - 1];
     std::cout << "Welcome, " << currUser->username() << "!\n\n";
 }
@@ -165,7 +161,7 @@ void drawBorderLine(char borderChar, int borderLength)
     std::cout << '\n';
 }
 
-void displayMessages(const std::vector<BbMessage> &messages)
+void displayMessages(const std::vector<BBMessage> &messages)
 {
     std::cout << "DISPLAY MESSAGES\n";
 
@@ -175,7 +171,7 @@ void displayMessages(const std::vector<BbMessage> &messages)
         return;
     }
 
-    for (const BbMessage &message : messages)
+    for (const BBMessage &message : messages)
     {
         drawBorderLine('-', 100);
         std::cout   << "topic: " << message.subject() << '\n'
@@ -186,10 +182,9 @@ void displayMessages(const std::vector<BbMessage> &messages)
     std::cout << "End of messages.\n\n";
 }
 
-void addTopic(const BbUser* &currUser, std::vector<BbMessage> &messages)
+void addTopic(const BBUser* &currUser, std::vector<BBMessage> &messages)
 {
     std::string subject, body;
-
     std::cout << "ADD NEW TOPIC\n";
     
     std::cout << "Enter subject: ";
@@ -199,11 +194,11 @@ void addTopic(const BbUser* &currUser, std::vector<BbMessage> &messages)
                 << "Hit 'ENTER' twice to stop:\n";
     body = enterBody();
 
-    messages.push_back(BbMessage(currUser->username(), subject, body));
+    messages.push_back(BBMessage(currUser->username(), subject, body));
     std::cout << "Added new topic \"" << subject << "\" to AP Bulletin Board.\n\n";
 }
 
-void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currUser)
+void runLogin(bool &exitCalled, std::vector<BBUser> &users, const BBUser* &currUser)
 {
     int option = 0;
     std::cout   << "LOGIN MENU\n"
@@ -211,6 +206,7 @@ void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currU
                 << "(2) Register\n"
                 << "(3) Exit\n\n";
     option = enterOption(3);
+    std::cout << '\n';
 
     if (option == 1)
     {
@@ -226,7 +222,7 @@ void runLogin(bool &exitCalled, std::vector<BbUser> &users, const BbUser* &currU
     }
 }
 
-void runMessage(const BbUser* &currUser, std::vector<BbMessage> &messages)
+void runMessage(const BBUser* &currUser, std::vector<BBMessage> &messages)
 {
     int option = 0;
     std::cout   << "MESSAGE MENU\n"
@@ -235,6 +231,7 @@ void runMessage(const BbUser* &currUser, std::vector<BbMessage> &messages)
                 << "(3) Reply to a Message\n"
                 << "(4) Log Out\n\n";
     option = enterOption(4);
+    std::cout << '\n';
 
     if (option == 1)
     {
@@ -256,12 +253,12 @@ void runMessage(const BbUser* &currUser, std::vector<BbMessage> &messages)
     }
 }
 
-void runBboard()
+void runBBoard()
 {
-    std::vector<BbUser> users;
-    const BbUser* currUser = nullptr;
+    std::vector<BBUser> users;
+    const BBUser* currUser = nullptr;
 
-    std::vector<BbMessage> messages;
+    std::vector<BBMessage> messages;
 
     bool exitCalled = false;
 
@@ -282,9 +279,9 @@ void runBboard()
     std::cout << "Goodbye!\n";
 }
 
+/*      DRIVER CODE     */
 int main()
 {
-    runBboard();
-
+    runBBoard();
     return 0;
 }
