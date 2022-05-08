@@ -4,14 +4,14 @@
 
 // std::size_t BBMessage::_memory = 0;
 
-BBMessage::BBMessage(std::string author, std::string body) :
-    _author(author), _body(body)
+BBMessage::BBMessage(std::string author, std::string body, std::size_t id,
+    const std::vector<BBMessage*> &replies) : _author(author), _body(body), _id(id), _replies(replies)
 {}
 
-BBMessage::BBMessage() : BBMessage("", "")
+BBMessage::BBMessage() : BBMessage("", "", 0, std::vector<BBMessage*>())
 {}
 
-BBMessage::BBMessage(const BBMessage &rhs) : BBMessage(rhs._author, rhs._body)
+BBMessage::BBMessage(const BBMessage &rhs) : BBMessage(rhs._author, rhs._body, rhs._id, rhs._replies)
 {}
 
 BBMessage& BBMessage::operator=(const BBMessage &rhs)
@@ -20,6 +20,8 @@ BBMessage& BBMessage::operator=(const BBMessage &rhs)
     {
         this->_author = rhs._author;
         this->_body = rhs._body;
+        this->_id = rhs._id;
+        this->_replies = rhs._replies;
     }
 
     return *this;
@@ -52,4 +54,19 @@ const std::string& BBMessage::author() const
 const std::string& BBMessage::body() const
 {
     return this->_body;
+}
+
+const std::size_t& BBMessage::id() const
+{
+    return this->_id;
+}
+
+const std::vector<BBMessage*>& BBMessage::replies() const
+{
+    return this->_replies;
+}
+
+void BBMessage::addReply(BBMessage* const &reply)
+{
+    this->_replies.push_back(reply);
 }

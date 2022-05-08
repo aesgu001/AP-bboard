@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bb-reply.h"
 #include "bb-topic.h"
 #include "bb-user.h"
 
@@ -77,7 +78,17 @@ void registerUser(std::vector<BBUser>&, const BBUser*&);
 *
 *   @return None.
 */
-void drawBorderLine(char, int);
+void drawBorderLine(char, std::size_t);
+
+/*
+*   Displays all of a message's replies, and their replies, to standard output.
+*
+*   @param replies the message's replies.
+*   @param indentLength the length of whitespaces preceding the messages.
+*
+*   @return None.
+*/
+void displayReplies(const std::vector<BBMessage*>&, std::size_t);
 
 /*
 *   Display all of BBoard's messages to standard output. Each topic is separated by a line border.
@@ -92,6 +103,13 @@ void displayMessages(const std::vector<BBMessage*>&);
 *   @return None.
 */
 void addTopic(const BBUser*&, std::vector<BBMessage*>&);
+
+/*
+*   Adds a reply to a message in the BBoard
+*
+*   @return None.
+*/
+void addReply(const BBUser*&, std::vector<BBMessage*>&);
 
 /*
 *   Opens a menu prompt with the following options: Login, Register, and Exit.
@@ -111,7 +129,7 @@ void runLogin(bool&, std::vector<BBUser>&, const BBUser*&);
 void runMessage(const BBUser*&, std::vector<BBMessage*>&);
 
 /*
-*   Launches the bulletin board, enabling user login/registration and posting messages.
+*   Launches the bulletin board (BBoard), enabling user login/registration and posting messages.
 *
 *   @return None.
 */

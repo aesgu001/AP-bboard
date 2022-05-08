@@ -9,7 +9,7 @@ private:
     std::string _subject;   // Subject of the message.
 public:
     // BBTopic parameterized constructor
-    BBTopic(std::string, std::string, std::string);
+    BBTopic(std::string, std::string, std::string, std::size_t, const std::vector<BBMessage*>&);
     // BBTopic default constructor
     BBTopic();
     // BBTopic copy constructor

@@ -2,17 +2,20 @@
 // BBMessage class interface
 
 #include <string>
+#include <vector>
 // #include <iostream> // std::cout, DEBUG
 
 class BBMessage
 {
 private:
     // static std::size_t _memory;  // Keeps track of currently allocated memory
-    std::string _author;            // Author of the message.
-    std::string _body;              // Message body.
+    std::string _author;                // Author of the message.
+    std::string _body;                  // Message text body.
+    std::size_t _id;                    // ID number of the message.
+    std::vector<BBMessage*> _replies;   // Replies to the message. 
 public:
     // BBMessage parameterized constructor
-    BBMessage(std::string, std::string);
+    BBMessage(std::string, std::string, std::size_t, const std::vector<BBMessage*>&);
     // BBMessage default constructor
     BBMessage();
     // BBMessage copy constructor
@@ -29,10 +32,23 @@ public:
     const std::string &author() const;
     // BBMessage body accessor
     const std::string &body() const;
+    // BBMessage ID accessor
+    const std::size_t &id() const;
+    // BBMessage replies accessor
+    const std::vector<BBMessage*> &replies() const;
     /*
     *   Checks if the message is a reply.
     *
     *   @return True if the caller is an instance of Reply.
     */
     virtual bool isReply() const = 0;
+    /*
+    *   Adds a reply to the message. This method, however, does not dynamically allocate memory for
+    *   BBMessage. 
+    *
+    *   @param reply the message responding to the caller.
+    * 
+    *   @return None.
+    */
+    void addReply(BBMessage* const &);
 };
