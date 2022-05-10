@@ -8,15 +8,18 @@ CFLAGS = -g -Wall -Werror
 TARGET = AP-bboard
 
 # Object files
-OBJ = bb-main.o bb-user.o bb-message.o bb-topic.o bb-reply.o
+OBJ = bb-main.o bb-board.o bb-user.o bb-message.o bb-topic.o bb-reply.o
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
 
-bb-main.o: bb-user.o bb-topic.o bb-reply.o bb-main.h bb-main.cpp
+bb-main.o: bb-board.o bb-main.h bb-main.cpp
 	$(CC) $(CFLAGS) -c bb-main.cpp
+
+bb-board.o: bb-user.o bb-topic.o bb-reply.o bb-board.h bb-board.cpp
+	$(CC) $(CFLAGS) -c bb-board.cpp
 
 bb-user.o: bb-user.h bb-user.cpp
 	$(CC) $(CFLAGS) -c bb-user.cpp

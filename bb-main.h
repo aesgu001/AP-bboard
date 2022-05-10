@@ -1,8 +1,6 @@
 #pragma once
 
-#include "bb-reply.h"
-#include "bb-topic.h"
-#include "bb-user.h"
+#include "bb-board.h"
 
 #include <iostream> // std::cin/cout
 #include <vector>   // std::vector
@@ -59,16 +57,20 @@ std::string enterBody();
 /*
 *   Assigns a registered user with the matching username and password inputs as the current user.
 *
+*   @param board the board to access user data from.
+*
 *   @return None.
 */
-void login(const std::vector<BBUser>&, const BBUser*&);
+void login(BBoard&);
 
 /*
 *   Adds a new user object to the BBoard and sets it as the current user.
 *
+*   @param board the board to access user data from.
+*
 *   @return None.
 */
-void registerUser(std::vector<BBUser>&, const BBUser*&);
+void registerUser(BBoard&);
 
 /*
 *   Writes a border line of characters to standard output.
@@ -93,44 +95,55 @@ void displayReplies(const std::vector<BBMessage*>&, std::size_t);
 /*
 *   Display all of BBoard's messages to standard output. Each topic is separated by a line border.
 *
+*   @param board the board to access message data from.
+*
 *   @return None.
 */
-void displayMessages(const std::vector<BBMessage*>&);
+void displayMessages(const BBoard&);
 
 /*
 *   Adds a new topic to the BBoard.
 *
+*   @param board the board to access message data from.
+*
 *   @return None.
 */
-void addTopic(const BBUser*&, std::vector<BBMessage*>&);
+void addTopic(BBoard&);
 
 /*
 *   Adds a reply to a message in the BBoard
 *
+*   @param board board to access message data from.
+*
 *   @return None.
 */
-void addReply(const BBUser*&, std::vector<BBMessage*>&);
+void addReply(BBoard&);
 
 /*
 *   Opens a menu prompt with the following options: Login, Register, and Exit.
 *
+*   @param board the board to access user data from.
 *   @param exitCalled flag to exit the program.
 *
 *   @return None.
 */
-void runLogin(bool&, std::vector<BBUser>&, const BBUser*&);
+void runLogin(BBoard&, bool&);
 
 /*
 *   Opens a menu prompt with the following options: Display Messages, Add New Topic, Reply to a Message,
 *   and Log Out.
 *
+*   @param board the board to access message data from.
+*
 *   @return None.
 */
-void runMessage(const BBUser*&, std::vector<BBMessage*>&);
+void runMessage(BBoard&);
 
 /*
 *   Launches the bulletin board (BBoard), enabling user login/registration and posting messages.
 *
+*   @param board the board to use.
+*
 *   @return None.
 */
-void runBBoard();
+void runBBoard(BBoard&);

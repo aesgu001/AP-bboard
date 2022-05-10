@@ -94,7 +94,7 @@ std::string enterBody()
     return body;
 }
 
-void login(const std::vector<BBUser> &users, const BBUser* &currUser)
+void login(BBoard &board)
 {
     std::string username, password;
     std::cout << "Enter username: ";
@@ -109,20 +109,17 @@ void login(const std::vector<BBUser> &users, const BBUser* &currUser)
         std::cout << "ERROR! Please enter a one-word password: ";
     }
 
-    for (const BBUser &user : users)
+    if (board.login(username, password))
     {
-        if (user.match(username, password))
-        {
-            currUser = &user;
-            std::cout << "Welcome back, " << currUser->username() << "!\n\n";
-            return;
-        }
+        std::cout << "Welcome back, " << board.currUser()->username() << "!\n\n";
     }
-
-    std::cout << "Incorrect username or password!\n\n";
+    else
+    {
+        std::cout << "Incorrect username or password!\n\n";
+    }
 }
 
-void registerUser(std::vector<BBUser> &users, const BBUser* &currUser)
+void registerUser(BBoard &board)
 {
     std::string username, password;
     std::cout << "Enter new username: ";
@@ -137,19 +134,14 @@ void registerUser(std::vector<BBUser> &users, const BBUser* &currUser)
         std::cout << "ERROR! Please enter a one-word password: ";
     }
 
-    for (const BBUser &user : users)
+    if (board.registerUser(username, password))
     {
-        if (user.username() == username)
-        {
-            std::cout << "ERROR! Username " << username << " already exists!\n\n";
-            return;
-        }
+        std::cout << "Welcome, " << board.currUser()->username() << "!\n\n";
     }
-
-    // Set new user at the end of the list as current user
-    users.push_back(BBUser(username, password));
-    currUser = &users[users.size() - 1];
-    std::cout << "Welcome, " << currUser->username() << "!\n\n";
+    else
+    {
+        std::cout << "ERROR! Username " << username << " already exists!\n\n";
+    }
 }
 
 void drawBorderLine(char borderChar, std::size_t borderLength)
@@ -173,7 +165,6 @@ void displayReplies(const std::vector<BBMessage*> &replies, std::size_t indentLe
     {
         std::string body = reply->body();
         std::size_t bodyLength = body.length();
-        std::vector<BBMessage*> subReplies = reply->replies();
 
         std::cout   << '\n' << indent << '#' << reply->id() << " "
                     << reply->author() << ": ";
@@ -188,38 +179,38 @@ void displayReplies(const std::vector<BBMessage*> &replies, std::size_t indentLe
             }
         }
 
-        if (!subReplies.empty())
+        if (!reply->replies().empty())
         {
-            displayReplies(subReplies, indentLength + 1);
+            displayReplies(reply->replies(), indentLength + 1);
         }
     }
 }
 
-void displayMessages(const std::vector<BBMessage*> &messages)
+void displayMessages(const BBoard &board)
 {
     std::cout << "DISPLAY MESSAGES\n";
 
-    if (messages.empty())
+    if (board.messages().empty())
     {
         std::cout << "There are no messages.\n\n";
         return;
     }
 
-    for (BBMessage* const &message : messages)
+    for (BBMessage* const &message : board.messages())
     {
         if (!message->isReply())
-        {
-            std::vector<BBMessage*> replies = message->replies();
-
+        {          
             drawBorderLine('-', 100);
+
             std::cout   << "topic: " << dynamic_cast<BBTopic* const>(message)->subject() << '\n'
                         << '#' << message->id() << " "
                         << message->author() << ": " << message->body();
-            if (!replies.empty())
+            if (!message->replies().empty())
             {
                 std::cout << "\nreplies:";
-                displayReplies(replies, 0);
+                displayReplies(message->replies(), 0);
             }
+
             drawBorderLine('-', 100);
         }
         
@@ -228,11 +219,9 @@ void displayMessages(const std::vector<BBMessage*> &messages)
     std::cout << "End of messages.\n\n";
 }
 
-void addTopic(const BBUser* &currUser, std::vector<BBMessage*> &messages)
+void addTopic(BBoard &board)
 {
     std::string subject, body;
-    BBMessage *topic = nullptr;
-
     std::cout << "ADD NEW TOPIC\n";
     
     std::cout << "Enter subject: ";
@@ -242,29 +231,26 @@ void addTopic(const BBUser* &currUser, std::vector<BBMessage*> &messages)
                 << "Hit 'ENTER' twice to stop:\n";
     body = enterBody();
 
-    topic = new BBTopic(subject, currUser->username(), body, messages.size() + 1,
-        std::vector<BBMessage*>());
-    messages.push_back(topic);
+    board.addTopic(subject, body);
     std::cout << "Added new topic \"" << subject << "\" to AP Bulletin Board.\n\n";
 }
 
-void addReply(const BBUser* &currUser, std::vector<BBMessage*> &messages)
+void addReply(BBoard &board)
 {
     int msgID = 0;
     std::string body;
     BBMessage *message = nullptr;
-    BBMessage *reply = nullptr;
 
     std::cout << "REPLY TO A MESSAGE\n";
 
-    if (messages.empty())
+    if (board.messages().empty())
     {
         std::cout << "There are no messages.\n\n";
         return;
     }
 
     std::cout << "Enter message ID# (0 to cancel): ";
-    while (!readInteger(msgID) || static_cast<std::size_t>(msgID) > messages.size())
+    while (!readInteger(msgID) || static_cast<std::size_t>(msgID) > board.messages().size())
     {
         std::cout << "ERROR! Please enter an existing message ID#: ";
     }
@@ -274,7 +260,7 @@ void addReply(const BBUser* &currUser, std::vector<BBMessage*> &messages)
         std::cout << '\n';
         return;
     }
-    message = messages[msgID - 1];
+    message = board.messages()[msgID - 1];
 
     drawBorderLine('-', 100);
     std::cout   << "message #" << msgID << '\n'
@@ -285,13 +271,11 @@ void addReply(const BBUser* &currUser, std::vector<BBMessage*> &messages)
                 << "Hit 'ENTER' twice to stop:\n";
     body = enterBody();
 
-    reply = new BBReply(currUser->username(), body, messages.size() + 1, std::vector<BBMessage*>());
-    messages.push_back(reply);
-    message->addReply(reply);
+    board.addReply(message, body);
     std::cout << "Added reply to message #" << msgID << ".\n\n";
 }
 
-void runLogin(bool &exitCalled, std::vector<BBUser> &users, const BBUser* &currUser)
+void runLogin(BBoard &board, bool &exitCalled)
 {
     int option = 0;
     std::cout   << "LOGIN MENU\n"
@@ -303,11 +287,11 @@ void runLogin(bool &exitCalled, std::vector<BBUser> &users, const BBUser* &currU
 
     if (option == 1)
     {
-        login(users, currUser);
+        login(board);
     }
     else if (option == 2)
     {
-        registerUser(users, currUser);
+        registerUser(board);
     }
     else // option == 3
     {
@@ -315,7 +299,7 @@ void runLogin(bool &exitCalled, std::vector<BBUser> &users, const BBUser* &currU
     }
 }
 
-void runMessage(const BBUser* &currUser, std::vector<BBMessage*> &messages)
+void runMessage(BBoard &board)
 {
     int option = 0;
     std::cout   << "MESSAGE MENU\n"
@@ -328,56 +312,47 @@ void runMessage(const BBUser* &currUser, std::vector<BBMessage*> &messages)
 
     if (option == 1)
     {
-        displayMessages(messages);
+        displayMessages(board);
     }
     else if (option == 2)
     {
-        addTopic(currUser, messages);
+        addTopic(board);
     }
     else if (option == 3)
     {
-        addReply(currUser, messages);
+        addReply(board);
     }
     else // option == 4
     {
-        std::cout << "Logging " << currUser->username() << " out...\n\n";
-        currUser = nullptr;
+        std::cout << "Logging " << board.currUser()->username() << " out...\n\n";
+        board.logout();
     }
 }
 
-void runBBoard()
+void runBBoard(BBoard &board)
 {
     bool exitCalled = false;
-    const BBUser* currUser = nullptr;
-    std::vector<BBUser> users;
-    std::vector<BBMessage*> messages; 
-
-    std::cout << "Welcome to AP Bulletin Board!\n\n";
+    std::cout << "Welcome to " << board.title() << "!\n\n";
 
     while (!exitCalled)
     {
-        if (!currUser)
+        if (!board.currUser())
         {
-            runLogin(exitCalled, users, currUser);
+            runLogin(board, exitCalled);
         }
         else
         {
-            runMessage(currUser, messages);
+            runMessage(board);
         }
     }
 
     std::cout << "Goodbye!\n";
-
-    for (BBMessage* &message : messages)
-    {
-        delete message;
-        message = nullptr;
-    }
 }
 
 /*      DRIVER CODE     */
 int main()
 {
-    runBBoard();
+    BBoard board("AP Bulletin Board");
+    runBBoard(board);
     return 0;
 }
