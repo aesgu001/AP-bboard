@@ -2,7 +2,8 @@
 
 #include "bb-user.h"
 
-BBUser::BBUser(std::string username, std::string password) : _username(username), _password(password)
+BBUser::BBUser(const std::string &username, const std::string &password) : _username(username),
+    _password(password)
 {}
 
 BBUser::BBUser() : BBUser("", "")
@@ -11,7 +12,7 @@ BBUser::BBUser() : BBUser("", "")
 BBUser::BBUser(const BBUser &rhs) : BBUser(rhs._username, rhs._password)
 {}
 
-BBUser& BBUser::operator=(const BBUser &rhs)
+BBUser &BBUser::operator=(const BBUser &rhs)
 {
     if (this != &rhs)
     {
@@ -25,12 +26,12 @@ BBUser& BBUser::operator=(const BBUser &rhs)
 BBUser::~BBUser()
 {}
 
-const std::string& BBUser::username() const
+const std::string &BBUser::username() const
 {
     return this->_username;
 }
 
-bool BBUser::match(std::string username, std::string password) const
+bool BBUser::match(const std::string &username, const std::string &password) const
 {
     if (username.empty() || password.empty())
     {

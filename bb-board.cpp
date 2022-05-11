@@ -2,8 +2,8 @@
 
 #include "bb-board.h"
 
-BBoard::BBoard(std::string title) : _title(title), _currUser(nullptr), _users(std::vector<BBUser>()),
-    _messages(std::vector<BBMessage*>())
+BBoard::BBoard(const std::string &title) : _title(title), _currUser(nullptr),
+    _users(std::vector<BBUser>()), _messages(std::vector<BBMessage*>())
 {}
 
 BBoard::BBoard() : BBoard("BBoard")
@@ -46,7 +46,7 @@ const std::vector<BBMessage*> &BBoard::messages() const
     return this->_messages;
 }
 
-bool BBoard::login(std::string username, std::string password)
+bool BBoard::login(const std::string &username, const std::string &password)
 {
     for (const BBUser &user : this->_users)
     {
@@ -60,7 +60,7 @@ bool BBoard::login(std::string username, std::string password)
     return false;
 }
 
-bool BBoard::registerUser(std::string username, std::string password)
+bool BBoard::registerUser(const std::string &username, const std::string &password)
 {
     for (const BBUser &user : this->_users)
     {
@@ -76,17 +76,17 @@ bool BBoard::registerUser(std::string username, std::string password)
     return true;
 }
 
-void BBoard::addTopic(std::string subject, std::string body)
+void BBoard::addTopic(const std::string &subject, const std::string &body)
 {
     if (this->_currUser)
     {
-        BBMessage *topic = new BBTopic(subject, this->_currUser->username(), body, this->_messages.size() + 1,
-            std::vector<BBMessage*>());
+        BBMessage *topic = new BBTopic(subject, this->_currUser->username(), body,
+            this->_messages.size() + 1);
         this->_messages.push_back(topic);
     }
 }
 
-void BBoard::addReply(BBMessage *const &message, std::string body)
+void BBoard::addReply(BBMessage *const &message, const std::string &body)
 {
     if (this->_currUser)
     {
@@ -95,8 +95,8 @@ void BBoard::addReply(BBMessage *const &message, std::string body)
         {
             if (msg == message)
             {
-                BBMessage *reply = new BBReply(this->_currUser->username(), body, this->_messages.size() + 1,
-                    std::vector<BBMessage*>());
+                BBMessage *reply = new BBReply(this->_currUser->username(), body,
+                    this->_messages.size() + 1);
                 this->_messages.push_back(reply);
                 message->addReply(reply);
                 return;

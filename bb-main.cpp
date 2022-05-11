@@ -53,7 +53,7 @@ bool readString(std::string &stString)
     return true;
 }
 
-int enterOption(int numOptions)
+int enterOption(const int &numOptions)
 {
     int option = 0;
     std::cout << "Enter option: ";
@@ -144,7 +144,7 @@ void registerUser(BBoard &board)
     }
 }
 
-void drawBorderLine(char borderChar, std::size_t borderLength)
+void drawBorderLine(const char &borderChar, const std::size_t &borderLength)
 {
     for (std::size_t i = 0; i < borderLength; ++i)
     {
@@ -153,7 +153,7 @@ void drawBorderLine(char borderChar, std::size_t borderLength)
     std::cout << '\n';
 }
 
-void displayReplies(const std::vector<BBMessage*> &replies, std::size_t indentLength)
+void displayReplies(const std::vector<BBMessage*> &replies, const std::size_t &indentLength)
 {
     std::string indent;
     for (std::size_t i = 0; i < indentLength; ++i)
@@ -201,7 +201,6 @@ void displayMessages(const BBoard &board)
         if (!message->isReply())
         {          
             drawBorderLine('-', 100);
-
             std::cout   << "topic: " << dynamic_cast<BBTopic* const>(message)->subject() << '\n'
                         << '#' << message->id() << " "
                         << message->author() << ": " << message->body();
@@ -210,7 +209,6 @@ void displayMessages(const BBoard &board)
                 std::cout << "\nreplies:";
                 displayReplies(message->replies(), 0);
             }
-
             drawBorderLine('-', 100);
         }
         
@@ -232,7 +230,7 @@ void addTopic(BBoard &board)
     body = enterBody();
 
     board.addTopic(subject, body);
-    std::cout << "Added new topic \"" << subject << "\" to AP Bulletin Board.\n\n";
+    std::cout << "Added new topic \"" << subject << "\" to " << board.title() << ".\n\n";
 }
 
 void addReply(BBoard &board)

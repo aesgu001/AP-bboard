@@ -37,7 +37,7 @@ bool readString(std::string&);
 *
 *   @return A valid number option.
 */
-int enterOption(int);
+int enterOption(const int&);
 
 /*
 *   Reads a subject string from standard input.
@@ -80,7 +80,7 @@ void registerUser(BBoard&);
 *
 *   @return None.
 */
-void drawBorderLine(char, std::size_t);
+void drawBorderLine(const char&, const std::size_t&);
 
 /*
 *   Displays all of a message's replies, and their replies, to standard output.
@@ -90,7 +90,7 @@ void drawBorderLine(char, std::size_t);
 *
 *   @return None.
 */
-void displayReplies(const std::vector<BBMessage*>&, std::size_t);
+void displayReplies(const std::vector<BBMessage*>&, const std::size_t&);
 
 /*
 *   Display all of BBoard's messages to standard output. Each topic is separated by a line border.

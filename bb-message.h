@@ -8,14 +8,14 @@
 class BBMessage
 {
 private:
-    // static std::size_t _memory;  // Keeps track of currently allocated memory
+    // static std::size_t _memory;      // Keeps track of currently allocated memory
     std::string _author;                // Author of the message.
     std::string _body;                  // Message text body.
     std::size_t _id;                    // ID number of the message.
     std::vector<BBMessage*> _replies;   // Replies to the message. 
 public:
     // BBMessage parameterized constructor
-    BBMessage(std::string, std::string, std::size_t, const std::vector<BBMessage*>&);
+    BBMessage(const std::string&, const std::string&, const std::size_t&);
     // BBMessage default constructor
     BBMessage();
     // BBMessage copy constructor
@@ -50,5 +50,5 @@ public:
     * 
     *   @return None.
     */
-    void addReply(BBMessage* const &);
+    void addReply(BBMessage* const&);
 };

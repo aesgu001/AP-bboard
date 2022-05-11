@@ -2,17 +2,17 @@
 
 #include "bb-reply.h"
 
-BBReply::BBReply(std::string author, std::string body, std::size_t id,
-    const std::vector<BBMessage*> &replies) : BBMessage(author, body, id, replies)
+BBReply::BBReply(const std::string &author, const std::string &body, const std::size_t &id) :
+    BBMessage(author, body, id)
 {}
 
-BBReply::BBReply() : BBReply("", "", 0, std::vector<BBMessage*>())
+BBReply::BBReply() : BBReply("", "", 0)
 {}
 
-BBReply::BBReply(const BBReply &rhs) : BBReply(rhs.author(), rhs.body(), rhs.id(), rhs.replies())
+BBReply::BBReply(const BBReply &rhs) : BBReply(rhs.author(), rhs.body(), rhs.id())
 {}
 
-BBReply& BBReply::operator=(const BBReply &rhs)
+BBReply &BBReply::operator=(const BBReply &rhs)
 {
     if (this != &rhs)
     {

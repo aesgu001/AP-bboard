@@ -14,7 +14,7 @@ private:
     std::vector<BBMessage*> _messages;  // List of posted messages.
 public:
     // BBoard parameterized constructor
-    BBoard(std::string);
+    BBoard(const std::string&);
     // BBoard default constructor
     BBoard();
     // BBoard copy constructor
@@ -38,7 +38,7 @@ public:
     * 
     *   @return True if a user with data matching the parameters exist.
     */
-    bool login(std::string, std::string);
+    bool login(const std::string&, const std::string&);
     /*
     *   Adds a new user object to the BBoard and sets it as the current user.
     *
@@ -47,7 +47,7 @@ public:
     * 
     *   @return True if the new user has a unique username ID.
     */
-    bool registerUser(std::string, std::string);
+    bool registerUser(const std::string&, const std::string&);
     /*
     *   Adds a new topic message to the BBoard.
     *
@@ -56,7 +56,7 @@ public:
     * 
     *   @return None.
     */
-    void addTopic(std::string, std::string);
+    void addTopic(const std::string&, const std::string&);
     /*
     *   Adds a new reply to a message in the BBoard.
     *
@@ -65,7 +65,7 @@ public:
     * 
     *   @return None.
     */
-    void addReply(BBMessage *const &message, std::string);
+    void addReply(BBMessage *const&, const std::string&);
     /*
     *   Logs the current user out of BBoard.
     *

@@ -2,15 +2,14 @@
 
 #include "bb-topic.h"
 
-BBTopic::BBTopic(std::string subject, std::string author, std::string body, std::size_t id,
-    const std::vector<BBMessage*> &replies) : BBMessage(author, body, id, replies), _subject(subject)
+BBTopic::BBTopic(const std::string &subject, const std::string &author, const std::string &body,
+    const std::size_t &id) : BBMessage(author, body, id), _subject(subject)
 {}
 
-BBTopic::BBTopic() : BBTopic("", "", "", 0, std::vector<BBMessage*>())
+BBTopic::BBTopic() : BBTopic("", "", "", 0)
 {}
 
-BBTopic::BBTopic(const BBTopic &rhs) : BBTopic(rhs._subject, rhs.author(), rhs.body(), rhs.id(),
-    rhs.replies())
+BBTopic::BBTopic(const BBTopic &rhs) : BBTopic(rhs._subject, rhs.author(), rhs.body(), rhs.id())
 {}
 
 BBTopic& BBTopic::operator=(const BBTopic &rhs)
@@ -27,7 +26,7 @@ BBTopic& BBTopic::operator=(const BBTopic &rhs)
 BBTopic::~BBTopic()
 {}
 
-const std::string& BBTopic::subject() const
+const std::string &BBTopic::subject() const
 {
     return this->_subject;
 }

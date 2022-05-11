@@ -7,7 +7,7 @@ class BBReply : public BBMessage
 {
 public:
     // BBReply parameterized constructor
-    BBReply(std::string, std::string, std::size_t, const std::vector<BBMessage*>&);
+    BBReply(const std::string&, const std::string&, const std::size_t&);
     // BBReply default constructor
     BBReply();
     // BBReply copy constructor

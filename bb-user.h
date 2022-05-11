@@ -10,13 +10,13 @@ private:
     std::string _password;  // Password for accessing the user.
 public:
     // BBUser parameterized constructor
-    BBUser(std::string, std::string);
+    BBUser(const std::string&, const std::string&);
     // BBUser default constructor
     BBUser();
     // BBUser copy constructor
     BBUser(const BBUser&);
     // BBUser overloaded assignment operator
-    BBUser& operator=(const BBUser&);
+    BBUser &operator=(const BBUser&);
     // BBUser destructor
     ~BBUser();
     // BBUser username accessor
@@ -31,5 +31,5 @@ public:
     *   @return True if both usernames and passwords are equivalent in length and characters.
     *           False if either username or password parameter is empty.
     */
-    bool match(std::string, std::string) const;
+    bool match(const std::string&, const std::string&) const;
 };
