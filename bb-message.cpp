@@ -2,8 +2,6 @@
 
 #include "bb-message.h"
 
-// std::size_t BBMessage::_memory = 0;
-
 BBMessage::BBMessage(const std::string &author, const std::string &body, const std::size_t &id) :
     _author(author), _body(body), _id(id), _replies(std::vector<BBMessage*>())
 {}
@@ -25,22 +23,6 @@ BBMessage& BBMessage::operator=(const BBMessage &rhs)
 
     return *this;
 }
-
-/*void* BBMessage::operator new(std::size_t size)
-{
-    _memory += size;
-    std::cout   << "Allocated: " << size << " bytes\n"
-                << "Memory usage: " << _memory << " bytes\n";
-    return ::operator new(size);
-}*/
-
-/*void BBMessage::operator delete(void* ptr, std::size_t size)
-{
-    _memory -= size;
-    std::cout   << "Freed: " << size << " bytes\n"
-                << "Memory usage: " << _memory << " bytes\n";
-    ::operator delete(ptr);
-}*/
 
 BBMessage::~BBMessage()
 {}

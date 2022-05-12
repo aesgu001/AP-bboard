@@ -12,7 +12,7 @@ BBoard::BBoard() : BBoard("BBoard")
 BBoard::BBoard(const BBoard &rhs) : BBoard(rhs._title)
 {}
 
-BBoard& BBoard::operator=(const BBoard &rhs)
+BBoard &BBoard::operator=(const BBoard &rhs)
 {
     if (this != &rhs)
     {

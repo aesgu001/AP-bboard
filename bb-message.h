@@ -3,12 +3,10 @@
 
 #include <string>
 #include <vector>
-// #include <iostream> // std::cout, DEBUG
 
 class BBMessage
 {
 private:
-    // static std::size_t _memory;      // Keeps track of currently allocated memory
     std::string _author;                // Author of the message.
     std::string _body;                  // Message text body.
     std::size_t _id;                    // ID number of the message.
@@ -22,10 +20,6 @@ public:
     BBMessage(const BBMessage&);
     // BBMessage overloaded assignment operator
     BBMessage &operator=(const BBMessage&);
-    // BBMessage overloaded new operator
-    // void *operator new(std::size_t);
-    // BBMessage overloaded delete operator
-    // void operator delete(void*, std::size_t);
     // BBMessage destructor
     virtual ~BBMessage();
     // BBMessage author accessor
