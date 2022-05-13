@@ -7,6 +7,23 @@ class BBTopic : public BBMessage
 {
 private:
     std::string _subject;   // Subject of the message.
+protected:
+    /*
+    *   Reads BBTopic data from input stream.
+    *
+    *   @param in the input stream.
+    * 
+    *   @return True if the data being read is in proper format.
+    */
+    bool read(std::istream&) override;
+    /*
+    *   Writes BBTopic data to output stream.
+    *
+    *   @param out the output stream.
+    * 
+    *   @return None.
+    */
+    void write(std::ostream&) const override;
 public:
     // BBTopic parameterized constructor
     BBTopic(const std::string&, const std::string&, const std::string&, const std::size_t&);
