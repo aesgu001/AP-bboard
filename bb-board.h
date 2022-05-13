@@ -30,6 +30,30 @@ public:
     // BBoard messages accessor
     const std::vector<BBMessage*> &messages() const;
     /*
+    *   Loads a copy of a BBUser object to BBoard.
+    *
+    *   @param obj the object to copy.
+    * 
+    *   @return None.
+    */
+    void loadUser(const BBUser&);
+    /*
+    *   Loads a copy of a BBTopic object to BBoard.
+    *
+    *   @param obj the object to copy.
+    * 
+    *   @return None.
+    */
+    void loadTopic(const BBTopic&);
+    /*
+    *   Loads a copy of a BBReply object to BBoard.
+    *
+    *   @param obj the object to copy.
+    * 
+    *   @return None.
+    */
+    void loadReply(const BBReply&);
+    /*
     *   Assigns a registered user with the matching username and password parameters as the
     *   current user.
     *

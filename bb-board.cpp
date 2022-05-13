@@ -46,6 +46,23 @@ const std::vector<BBMessage*> &BBoard::messages() const
     return this->_messages;
 }
 
+void BBoard::loadUser(const BBUser &obj)
+{
+    this->_users.push_back(obj);
+}
+
+void BBoard::loadTopic(const BBTopic &obj)
+{
+    BBMessage *message = new BBTopic(obj.subject(), obj.author(), obj.body(), obj.id());
+    this->_messages.push_back(message);
+}
+
+void BBoard::loadReply(const BBReply &obj)
+{
+    BBMessage *message = new BBReply(obj.author(), obj.body(), obj.id());
+    this->_messages.push_back(message);
+}
+
 bool BBoard::login(const std::string &username, const std::string &password)
 {
     for (const BBUser &user : this->_users)

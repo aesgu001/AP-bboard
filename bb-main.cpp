@@ -53,6 +53,83 @@ bool readString(std::string &stString)
     return true;
 }
 
+void loadUserData(BBoard &board, const char *const &userFile)
+{
+    std::ifstream in;
+    BBUser user;
+
+    std::cout << "Loading user data... ";
+    in.open(userFile);
+    if (!in.is_open())
+    {
+        std::cout << "ERROR! Failed to open " << userFile << "!\n";
+        return;
+    }
+
+    while (in >> user)
+    {
+        board.loadUser(user);
+    }
+
+    in.close();
+    if (!in.eof())
+    {
+        std::cout << "WARNING! Failed to load all users!\n";
+    }
+    else
+    {
+        std::cout << "Success!\n";
+    }
+}
+
+void loadMessageData(BBoard &board, const char *const &msgFile)
+{
+    std::string messageType;
+    std::ifstream in;
+    BBTopic topic;
+    BBReply reply;
+
+    std::cout << "Loading message data... ";
+    in.open(msgFile);
+    if (!in.is_open())
+    {
+        std::cout << "ERROR! Failed to open " << msgFile << "!\n";
+        return;
+    }
+
+    while (in >> messageType)
+    {
+        if (messageType == "Topic:")
+        {
+            if (!(in >> topic))
+            {
+                break;
+            }
+
+            board.loadTopic(topic);
+        }
+        else if (messageType == "Reply:")
+        {
+            if (!(in >> reply))
+            {
+                break;
+            }
+
+            board.loadReply(reply);
+        }
+    }
+
+    in.close();
+    if (!in.eof())
+    {
+        std::cout << "WARNING! Failed to load all messages!\n";
+    }
+    else
+    {
+        std::cout << "Success!\n";
+    }
+}
+
 int enterOption(const int &numOptions)
 {
     int option = 0;
@@ -344,13 +421,34 @@ void runBBoard(BBoard &board)
         }
     }
 
+    // TODO: saveBBoardData(board);
     std::cout << "Goodbye!\n";
 }
 
 /*      DRIVER CODE     */
-int main()
+int main(int argc, char **argv)
 {
     BBoard board("AP Bulletin Board");
+    if (argc == 2)
+    {
+        loadUserData(board, argv[1]);
+        std::cout << '\n';
+    }
+    else if (argc == 3)
+    {
+        std::cout   << "ERROR! Invalid call! Program usage:\n\n"
+                    << argv[0] << "\n\n"
+                    << argv[0] << " <user data>.txt\n\n"
+                    << argv[0] << " <user data>.txt <message data>.txt <message table>.txt\n\n";
+        return 1; 
+    }
+    else if (argc == 4)
+    {
+        loadUserData(board, argv[1]);
+        loadMessageData(board, argv[2]);
+        // TODO: loadMessageTable(board, argv[3]);
+        std::cout << '\n';
+    }
     runBBoard(board);
     return 0;
 }

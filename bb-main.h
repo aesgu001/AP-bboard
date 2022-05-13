@@ -2,6 +2,7 @@
 
 #include "bb-board.h"
 
+#include <fstream>  // 
 #include <iostream> // std::cin/cout
 #include <vector>   // std::vector
 
@@ -29,6 +30,26 @@ bool readInteger(int&);
 *   @return True if the string does not contain a whitespace, tab, or newline character.
 */
 bool readString(std::string&);
+
+/*
+*   Reads BBUser data from file to BBoard.
+*
+*   @param board the board to store data into.
+*   @param userFile the text file to load from.
+*
+*   @return None.
+*/
+void loadUserData(BBoard&, const char *const&);
+
+/*
+*   Reads BBMessage data from file to BBoard.
+*
+*   @param board the board to store data into.
+*   @param msgFile the text file to load from.
+*
+*   @return None.
+*/
+void loadMessageData(BBoard&, const char *const&);
 
 /*
 *   Reads a number option from standard input.

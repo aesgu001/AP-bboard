@@ -72,6 +72,8 @@ bool BBMessage::read(std::istream &in)
 
     // Remove newline character from buffer to read body text
     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // Overwrite body text
+    this->_body = "";
     while (std::getline(in, bodyNext) && bodyNext != BODY_END)
     {
         this->_body += bodyNext + '\n';

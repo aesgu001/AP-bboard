@@ -55,10 +55,14 @@ bool BBTopic::read(std::istream &in)
     {
         return false;
     }
-    else if (!(in >> this->_subject))
+
+    // Remove newline character from buffer to read subject
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (!std::getline(in, this->_subject))
     {
         return false;
     }
+    
     else if (!(in >> end) || end != END)
     {
         return false;
