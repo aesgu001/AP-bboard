@@ -2,7 +2,7 @@
 
 #include "bb-board.h"
 
-#include <fstream>  // 
+#include <fstream>  // std::ifstream
 #include <iostream> // std::cin/cout
 #include <vector>   // std::vector
 
@@ -159,6 +159,44 @@ void runLogin(BBoard&, bool&);
 *   @return None.
 */
 void runMessage(BBoard&);
+
+/*
+*   Writes user data to file.
+*
+*   @param userFile text file to write to.
+*
+*   @return None.
+*/
+void writeUserData(BBoard&, const char *const&);
+
+/*
+*   Writes 0 or more reply data to output stream.
+*
+*   @param out output stream.
+*   @param rcpID message recipient ID.
+*   @param replies message replies.
+*
+*   @return None.
+*/
+void writeReplyData(std::ostream&, const std::size_t&, const std::vector<BBMessage*>&);
+
+/*
+*   Writes message data to file.
+*
+*   @param messageFile text file to write to.
+*
+*   @return None.
+*/
+void writeMessageData(BBoard&, const char *const&);
+
+/*
+*   Writes bboard data to user and message files.
+*
+*   @param board board to record.
+*
+*   @return None.
+*/
+void writeBBoardData(BBoard&);
 
 /*
 *   Launches the bulletin board (BBoard), enabling user login/registration and posting messages.

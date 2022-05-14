@@ -27,32 +27,35 @@ public:
     const std::string &title() const;
     // BBoard current user accessor
     const BBUser *const &currUser() const;
+    // BBoard users accessor
+    const std::vector<BBUser> &users() const;
     // BBoard messages accessor
     const std::vector<BBMessage*> &messages() const;
     /*
     *   Loads a copy of a BBUser object to BBoard.
     *
-    *   @param obj the object to copy.
+    *   @param obj object to copy.
     * 
-    *   @return None.
+    *   @return True if the object is valid.
     */
-    void loadUser(const BBUser&);
+    bool loadUser(const BBUser&);
     /*
     *   Loads a copy of a BBTopic object to BBoard.
     *
-    *   @param obj the object to copy.
+    *   @param obj object to copy.
     * 
-    *   @return None.
+    *   @return True if the object is valid.
     */
-    void loadTopic(const BBTopic&);
+    bool loadTopic(const BBTopic&);
     /*
     *   Loads a copy of a BBReply object to BBoard.
     *
-    *   @param obj the object to copy.
+    *   @param obj object to copy.
+    *   @param rcpID message recipient's ID#.
     * 
-    *   @return None.
+    *   @return True if the object is valid.
     */
-    void loadReply(const BBReply&);
+    bool loadReply(const BBReply&, const std::size_t&);
     /*
     *   Assigns a registered user with the matching username and password parameters as the
     *   current user.

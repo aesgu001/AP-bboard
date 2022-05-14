@@ -26,9 +26,15 @@ BBoard::~BBoard()
 {
     for (BBMessage* &message : this->_messages)
     {
-        delete message;
-        message = nullptr;
+        if (message)
+        {
+            delete message;
+            message = nullptr;
+        }
     }
+
+    // Clear vector to prevent re-access
+    this->_messages.clear();
 }
 
 const std::string &BBoard::title() const
@@ -41,26 +47,94 @@ const BBUser *const &BBoard::currUser() const
     return this->_currUser;
 }
 
+const std::vector<BBUser> &BBoard::users() const
+{
+    return this->_users;
+}
+
 const std::vector<BBMessage*> &BBoard::messages() const
 {
     return this->_messages;
 }
 
-void BBoard::loadUser(const BBUser &obj)
+bool BBoard::loadUser(const BBUser &obj)
 {
+    // Check if user already exists in BBoard
+    for (const BBUser &user : this->_users)
+    {
+        if (obj.username() == user.username())
+        {
+            return false;
+        }
+    }
+
+    // Add user to BBoard
     this->_users.push_back(obj);
+    return true;
 }
 
-void BBoard::loadTopic(const BBTopic &obj)
+bool BBoard::loadTopic(const BBTopic &obj)
 {
-    BBMessage *message = new BBTopic(obj.subject(), obj.author(), obj.body(), obj.id());
-    this->_messages.push_back(message);
+    // Expand vector size to match object id
+    if (obj.id() > this->_messages.size())
+    {
+        this->_messages.resize(this->_messages.size() + obj.id(), nullptr);
+
+        // Allocate memory for topic message
+        this->_messages[obj.id() - 1] = new BBTopic(obj);
+        return true;
+    }
+    // Check if message at index is NULL
+    else if (!this->_messages[obj.id() - 1])
+    {
+        this->_messages[obj.id() - 1] = new BBTopic(obj);
+        return true;
+    }
+
+    return false;
 }
 
-void BBoard::loadReply(const BBReply &obj)
+bool BBoard::loadReply(const BBReply &obj, const std::size_t &rcpID)
 {
-    BBMessage *message = new BBReply(obj.author(), obj.body(), obj.id());
-    this->_messages.push_back(message);
+    // Message recipient must have a lesser ID# (rcp ID)
+    if (rcpID >= obj.id())
+    {
+        return false;
+    }
+    // rcp ID < vector size
+    else if (rcpID > this->_messages.size())
+    {
+        return false;
+    }
+    // Message at rcp ID must not be NULL
+    else if (!this->_messages[rcpID - 1])
+    {
+        return false;
+    }
+    // Expand vector size to match object id
+    else if (obj.id() > this->_messages.size())
+    {
+        this->_messages.resize(this->_messages.size() + obj.id(), nullptr);
+
+        // Allocate memory for reply message
+        this->_messages[obj.id() - 1] = new BBReply(obj);
+
+        // Add reply to message recipient
+        this->_messages[rcpID - 1]->addReply(this->_messages[obj.id() - 1]);
+        return true;
+    }
+    // Check if message at index is NULL
+    else if (!this->_messages[obj.id() - 1])
+    {
+        // Allocate memory for reply message
+        this->_messages[obj.id() - 1] = new BBReply(obj);
+
+        // Add reply to message recipient
+        this->_messages[rcpID - 1]->addReply(this->_messages[obj.id() - 1]);
+        return true;
+    }
+
+    return false;
 }
 
 bool BBoard::login(const std::string &username, const std::string &password)

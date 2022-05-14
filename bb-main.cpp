@@ -55,10 +55,15 @@ bool readString(std::string &stString)
 
 void loadUserData(BBoard &board, const char *const &userFile)
 {
+    // Flag for all successful reads.
+    bool loadSuccess = true;
+    // Input stream from user file.
     std::ifstream in;
+    // User object to copy.
     BBUser user;
 
     std::cout << "Loading user data... ";
+
     in.open(userFile);
     if (!in.is_open())
     {
@@ -68,11 +73,14 @@ void loadUserData(BBoard &board, const char *const &userFile)
 
     while (in >> user)
     {
-        board.loadUser(user);
+        if (!board.loadUser(user) && loadSuccess)
+        {
+            loadSuccess = false;
+        }
     }
 
     in.close();
-    if (!in.eof())
+    if (!in.eof() || !loadSuccess)
     {
         std::cout << "WARNING! Failed to load all users!\n";
     }
@@ -84,12 +92,21 @@ void loadUserData(BBoard &board, const char *const &userFile)
 
 void loadMessageData(BBoard &board, const char *const &msgFile)
 {
+    // Flag for all successful reads.
+    bool loadSuccess = true;
+    // Message subclass type.
     std::string messageType;
+    // Input stream from message file.
     std::ifstream in;
+    // Topic object to copy.
     BBTopic topic;
+    // Reply object to copy.
     BBReply reply;
+    // Message recipient's ID (for reply).
+    std::size_t rcpID = 0;
 
     std::cout << "Loading message data... ";
+
     in.open(msgFile);
     if (!in.is_open())
     {
@@ -105,22 +122,26 @@ void loadMessageData(BBoard &board, const char *const &msgFile)
             {
                 break;
             }
-
-            board.loadTopic(topic);
+            else if (!board.loadTopic(topic) && loadSuccess)
+            {
+                loadSuccess = false;
+            }
         }
         else if (messageType == "Reply:")
         {
-            if (!(in >> reply))
+            if (!(in >> rcpID) || !(in >> reply))
             {
                 break;
             }
-
-            board.loadReply(reply);
+            else if (!board.loadReply(reply, rcpID) && loadSuccess)
+            {
+                loadSuccess = false;
+            }
         }
     }
 
     in.close();
-    if (!in.eof())
+    if (!in.eof() || !loadSuccess)
     {
         std::cout << "WARNING! Failed to load all messages!\n";
     }
@@ -275,7 +296,11 @@ void displayMessages(const BBoard &board)
 
     for (BBMessage* const &message : board.messages())
     {
-        if (!message->isReply())
+        if (!message)
+        {
+            continue;
+        }
+        else if (!message->isReply())
         {          
             drawBorderLine('-', 100);
             std::cout   << "topic: " << dynamic_cast<BBTopic* const>(message)->subject() << '\n'
@@ -325,7 +350,8 @@ void addReply(BBoard &board)
     }
 
     std::cout << "Enter message ID# (0 to cancel): ";
-    while (!readInteger(msgID) || static_cast<std::size_t>(msgID) > board.messages().size())
+    while (!readInteger(msgID) || static_cast<std::size_t>(msgID) > board.messages().size() ||
+        !board.messages()[msgID - 1])
     {
         std::cout << "ERROR! Please enter an existing message ID#: ";
     }
@@ -404,11 +430,132 @@ void runMessage(BBoard &board)
     }
 }
 
+void writeReplyData(std::ostream &out, const std::size_t &rcpID,
+    const std::vector<BBMessage*> &replies)
+{
+    for (const BBMessage *const &reply : replies)
+    {
+        out << "Reply:\n"
+            << rcpID << '\n'
+            << *reply << '\n';
+    }
+}
+
+void writeMessageData(BBoard &board, const char *const &messageFile)
+{
+    // Output stream to message file.
+    std::ofstream out;
+
+    std::cout << "Saving message data... ";
+
+    // Open message file
+    out.open(messageFile);
+    if (!out.is_open())
+    {
+        std::cout << "ERROR! Failed to open " << messageFile << "!\n";
+        return;
+    }
+
+    // Write all BBoard messages to ostream
+    for (const BBMessage *const &message : board.messages())
+    {
+        if (!message)
+        {
+            continue;
+        }
+        else if (!message->isReply())
+        {
+            out << "Topic:\n"
+                << *message << '\n';
+            writeReplyData(out, message->id(), message->replies());
+        }
+        else
+        {
+            writeReplyData(out, message->id(), message->replies());
+        }
+    }
+
+    // Close message file
+    out.close();
+
+    std::cout << "Success!\n";
+}
+
+void writeUserData(BBoard &board, const char *const &userFile)
+{
+    // Output stream to user file.
+    std::ofstream out;
+
+    std::cout << "Saving user data... ";
+
+    // Open user file
+    out.open(userFile);
+    if (!out.is_open())
+    {
+        std::cout << "ERROR! Failed to open " << userFile << "!\n";
+        return;
+    }
+
+    // Write all BBoard users to ostream
+    for (const BBUser &user : board.users())
+    {
+        out << user << '\n';
+    }
+
+    // Close user file
+    out.close();
+
+    std::cout << "Success!\n";
+}
+
+void writeBBoardData(BBoard &board)
+{
+    int option = 0;
+
+    // Open save menu
+    std::cout   << "SAVE MENU\n"
+                << "(1) Save BBoard Data\n"
+                << "(2) Exit\n\n";
+
+    // Enter menu option
+    option = enterOption(2);
+    std::cout << '\n';
+
+    if (option == 1)
+    {
+        // BBoard data files.
+        std::string userFile, msgFile;
+
+        // Open prompt for userFile
+        std::cout << "Enter user file name: ";
+        while (!readString(userFile))
+        {
+            std::cout << "ERROR! Please enter a one-word user file name: ";
+        }
+
+        // Open prompt for msgFile
+        std::cout << "Enter message file name: ";
+        while (!readString(msgFile))
+        {
+            std::cout << "ERROR! Please enter a one-word message file name: ";
+        }
+
+        // Write to userFile
+        writeUserData(board, userFile.c_str());
+
+        // Write to msgFile
+        writeMessageData(board, msgFile.c_str());
+        std::cout << '\n';
+    }
+}
+
 void runBBoard(BBoard &board)
 {
     bool exitCalled = false;
+
     std::cout << "Welcome to " << board.title() << "!\n\n";
 
+    // Open message menu if user is logged in
     while (!exitCalled)
     {
         if (!board.currUser())
@@ -421,34 +568,45 @@ void runBBoard(BBoard &board)
         }
     }
 
-    // TODO: saveBBoardData(board);
+    // Opt to save BBoard data
+    writeBBoardData(board);
+
     std::cout << "Goodbye!\n";
 }
 
 /*      DRIVER CODE     */
 int main(int argc, char **argv)
 {
+    // BBoard of the program.
     BBoard board("AP Bulletin Board");
-    if (argc == 2)
+
+    // New BBoard
+    if (argc == 1);
+    // BBoard with user data loaded
+    else if (argc == 2)
     {
         loadUserData(board, argv[1]);
         std::cout << '\n';
     }
+    // BBoard with user and message data loaded
     else if (argc == 3)
+    {
+        loadUserData(board, argv[1]);
+        loadMessageData(board, argv[2]);
+        std::cout << '\n';    
+    }
+    // Invalid program call
+    else
     {
         std::cout   << "ERROR! Invalid call! Program usage:\n\n"
                     << argv[0] << "\n\n"
                     << argv[0] << " <user data>.txt\n\n"
-                    << argv[0] << " <user data>.txt <message data>.txt <message table>.txt\n\n";
-        return 1; 
+                    << argv[0] << " <user data>.txt <message data>.txt\n";
+        return 1;
     }
-    else if (argc == 4)
-    {
-        loadUserData(board, argv[1]);
-        loadMessageData(board, argv[2]);
-        // TODO: loadMessageTable(board, argv[3]);
-        std::cout << '\n';
-    }
+
+    // Launch BBoard
     runBBoard(board);
+
     return 0;
 }
