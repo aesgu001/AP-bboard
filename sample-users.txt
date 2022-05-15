@@ -1,0 +1,16 @@
+<begin_BBUser>
+alice
+pass1
+<end_BBUser>
+<begin_BBUser>
+bob
+pass2
+<end_BBUser>
+<begin_BBUser>
+colt
+pass3
+<end_BBUser>
+<begin_BBUser>
+dina
+pass4
+<end_BBUser>
