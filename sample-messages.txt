@@ -1,0 +1,199 @@
+Topic:
+<begin_BBTopic>
+<begin_BBMessage>
+bob
+<begin_std::string>
+Hey guys, I just finished Uncharted. Loved every second of it!
+Do you have any recommendations for my next game?
+<end_std::string>
+1
+<end_BBMessage>
+New Video Game
+<end_BBTopic>
+Reply:
+1
+<begin_BBReply>
+<begin_BBMessage>
+colt
+<begin_std::string>
+Try Call of Duty! There's the single player campaign with an amazing story.
+Then there's multiplayer. A lot of people are online playing this game.
+If you'd like, we can play together! What's your user ID?
+<end_std::string>
+4
+<end_BBMessage>
+<end_BBReply>
+Reply:
+1
+<begin_BBReply>
+<begin_BBMessage>
+bob
+<begin_std::string>
+I prefer the Adventure/RPG genre by the way,
+but I'm down to playing other games if they sound fun.
+<end_std::string>
+8
+<end_BBMessage>
+<end_BBReply>
+Topic:
+<begin_BBTopic>
+<begin_BBMessage>
+dina
+<begin_std::string>
+The salon I work at is offering a 10% discount to the first 10 customers.
+For any of you interested, please stop by today!
+<end_std::string>
+2
+<end_BBMessage>
+Nail Salon 10% Discount!
+<end_BBTopic>
+Reply:
+2
+<begin_BBReply>
+<begin_BBMessage>
+colt
+<begin_std::string>
+Count me in! A pedicure is just what I need right now.
+<end_std::string>
+3
+<end_BBMessage>
+<end_BBReply>
+Reply:
+3
+<begin_BBReply>
+<begin_BBMessage>
+dina
+<begin_std::string>
+Great! Looking forward to meeting you, colt!
+<end_std::string>
+9
+<end_BBMessage>
+<end_BBReply>
+Reply:
+4
+<begin_BBReply>
+<begin_BBMessage>
+bob
+<begin_std::string>
+Sounds fun!
+My user ID is tallerTwin90. Feel free to add me anytime :)
+<end_std::string>
+6
+<end_BBMessage>
+<end_BBReply>
+Topic:
+<begin_BBTopic>
+<begin_BBMessage>
+alice
+<begin_std::string>
+So, who's your favorite NBA team?
+I'll always be rooting for the Lakers!
+<end_std::string>
+5
+<end_BBMessage>
+Best NBA Team?
+<end_BBTopic>
+Reply:
+5
+<begin_BBReply>
+<begin_BBMessage>
+bob
+<begin_std::string>
+Heat all the way for me!
+<end_std::string>
+7
+<end_BBMessage>
+<end_BBReply>
+Reply:
+5
+<begin_BBReply>
+<begin_BBMessage>
+colt
+<begin_std::string>
+I used to be a Lakers fan, but then I saw how the Warriors played over at Chase.
+Mmm, can't get another team like them.
+<end_std::string>
+12
+<end_BBMessage>
+<end_BBReply>
+Reply:
+6
+<begin_BBReply>
+<begin_BBMessage>
+colt
+<begin_std::string>
+HEYO! We'll be an unstoppable team >:)
+<end_std::string>
+11
+<end_BBMessage>
+<end_BBReply>
+Reply:
+7
+<begin_BBReply>
+<begin_BBMessage>
+dina
+<begin_std::string>
+Mine, too! It's my home team, and Jimmy Butler is an amazing forward!
+I hope to meet him in person one of these days.
+<end_std::string>
+10
+<end_BBMessage>
+<end_BBReply>
+Reply:
+8
+<begin_BBReply>
+<begin_BBMessage>
+alice
+<begin_std::string>
+I know it's an old game, but have you heard of TES IV: Oblivion?
+I've been playing that one since its release.
+<end_std::string>
+14
+<end_BBMessage>
+<end_BBReply>
+Reply:
+10
+<begin_BBReply>
+<begin_BBMessage>
+alice
+<begin_std::string>
+I know someone who did, actually! He sent me a group photo of him with his friends!
+He also has a poster of him in his room, signed!
+The lucky bastard.
+<end_std::string>
+15
+<end_BBMessage>
+<end_BBReply>
+Reply:
+12
+<begin_BBReply>
+<begin_BBMessage>
+alice
+<begin_std::string>
+Haha, TRAITOR! Get off my post!
+<end_std::string>
+13
+<end_BBMessage>
+<end_BBReply>
+Reply:
+15
+<begin_BBReply>
+<begin_BBMessage>
+dina
+<begin_std::string>
+What!? No way!
+<end_std::string>
+17
+<end_BBMessage>
+<end_BBReply>
+Topic:
+<begin_BBTopic>
+<begin_BBMessage>
+colt
+<begin_std::string>
+Wanna see some funny memes, guys?
+<end_std::string>
+16
+<end_BBMessage>
+IDK
+<end_BBTopic>
